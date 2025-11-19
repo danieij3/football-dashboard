@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Football Match Insights Dashboard</title>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Link to your CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Football Match Insights Dashboard</h1>
+
+    <p>
+        This prototype shows how football match data can be processed by a Python backend
+        and visualised with an interactive chart.
+    </p>
+
+    <h2>Example Match Timeline</h2>
+    <p id="match-title"></p>
+    <canvas id="scoreChart" width="800" height="400"></canvas>
+
+    <h2>Planned Features</h2>
+    <ul>
+        <li>Connect to real football-data.org or API-Football</li>
+        <li>Team form and league table views</li>
+        <li>Simple win probability visualisation</li>
+    </ul>
+</div>
+
+<!-- Link to your JS -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
