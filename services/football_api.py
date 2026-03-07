@@ -49,17 +49,17 @@ def _get(endpoint: str, params: dict = None) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Competitions
+# Competitions — football-data.org v4
 # ---------------------------------------------------------------------------
 
 def get_competitions() -> list:
-    """Return the list of supported tier-one competitions."""
+    """Fetch and return supported tier-one competitions from football-data.org."""
     return [{"code": code, "id": v["id"], "name": v["name"]}
             for code, v in COMPETITIONS.items()]
 
 
 # ---------------------------------------------------------------------------
-# Matches
+# Matches — football-data.org v4
 # ---------------------------------------------------------------------------
 
 def _clean_match(match: dict) -> dict:
@@ -85,7 +85,7 @@ def _clean_match(match: dict) -> dict:
 
 
 def get_matches_by_competition(competition_id: int) -> list:
-    """Fetch the latest matches for a competition (max 10)."""
+    """Fetch latest finished matches for a competition from football-data.org (max 10)."""
     data = _get(f"/competitions/{competition_id}/matches",
                 params={"limit": 10, "status": "FINISHED"})
     return [_clean_match(m) for m in data.get("matches", [])]
