@@ -1,5 +1,6 @@
 """
 API Blueprint — all /api/* REST endpoints.
+Core endpoints: matches, teams, league standings.
 Each endpoint returns JSON and handles errors gracefully.
 """
 
@@ -37,7 +38,7 @@ def competitions():
 
 
 # ---------------------------------------------------------------------------
-# Matches
+# Matches — GET /api/matches
 # ---------------------------------------------------------------------------
 
 @api.route("/matches")
@@ -65,7 +66,7 @@ def matches():
 
 
 # ---------------------------------------------------------------------------
-# Standings
+# League standings — GET /api/standings/<competition_id>
 # ---------------------------------------------------------------------------
 
 @api.route("/standings/<int:competition_id>")
@@ -81,7 +82,7 @@ def standings(competition_id):
 
 
 # ---------------------------------------------------------------------------
-# Teams
+# Teams — GET /api/teams/<competition_id>, GET /api/team/<team_id>
 # ---------------------------------------------------------------------------
 
 @api.route("/teams/<int:competition_id>")
