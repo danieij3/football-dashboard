@@ -2,37 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Football Match Insights Dashboard</title>
-
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Link to your CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<div class="container">
-    <h1>Football Match Insights Dashboard</h1>
+    <nav class="navbar">
+        <span class="nav-logo">&#9917; Football Insights</span>
+        <span class="nav-sub">Live Match Dashboard &mdash; Daniel Ejie</span>
+    </nav>
 
-    <p>
-        This prototype shows how football match data can be processed by a Python backend
-        and visualised with an interactive chart.
-    </p>
+    <div class="container">
 
-    <h2>Example Match Timeline</h2>
-    <p id="match-title"></p>
-    <canvas id="scoreChart" width="800" height="400"></canvas>
+        <!-- Dashboard layout: competition and team filters drive data loading -->
+        <div class="card filters-card">
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="comp-select">Competition</label>
+                    <select id="comp-select"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="team-select">Team (optional)</label>
+                    <select id="team-select">
+                        <option value="">All teams</option>
+                    </select>
+                </div>
+                <button id="load-btn" class="btn btn-primary">Load Data</button>
+            </div>
+        </div>
 
-    <h2>Planned Features</h2>
-    <ul>
-        <li>Connect to real football-data.org or API-Football</li>
-        <li>Team form and league table views</li>
-        <li>Simple win probability visualisation</li>
-    </ul>
-</div>
+        <div id="error-banner" class="error-banner" style="display:none"></div>
+        <div id="loading" class="loading" style="display:none">Loading data&hellip;</div>
 
-<!-- Link to your JS -->
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        <!-- Stats Summary Row -->
+        <div class="stats-row" id="stats-row" style="display:none">
+            <div class="stat-card" id="stat-played">
+                <div class="stat-value" id="s-played">–</div>
+                <div class="stat-label">Matches Played</div>
+            </div>
+            <div class="stat-card" id="stat-wins">
+                <div class="stat-value" id="s-wins">–</div>
+                <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-card" id="stat-goals">
+                <div class="stat-value" id="s-goals">–</div>
+                <div class="stat-label">Goals For</div>
+            </div>
+            <div class="stat-card" id="stat-points">
+                <div class="stat-value" id="s-points">–</div>
+                <div class="stat-label">Points</div>
+            </div>
+        </div>
+
+        <!-- Recent Matches -->
+        <div class="card">
+            <h2 class="section-title">&#128197; Recent Matches</h2>
+            <div class="table-wrap">
+                <table id="matches-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Home</th>
+                            <th class="center">HT</th>
+                            <th class="center">FT</th>
+                            <th>Away</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matches-tbody">
+                        <tr><td colspan="6" class="empty">Select a competition and click Load Data.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="charts-row">
+            <div class="card chart-card">
+                <h2 class="section-title">&#128200; Team Form (Last 5)</h2>
+                <canvas id="formChart"></canvas>
+            </div>
+            <div class="card chart-card">
+                <h2 class="section-title">&#127944; Goals Scored vs Conceded</h2>
+                <canvas id="goalsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Points Progression -->
+        <div class="card">
+            <h2 class="section-title">&#128202; Points Progression (Top 5 Teams)</h2>
+            <canvas id="pointsChart" height="120"></canvas>
+        </div>
+
+        <!-- Team Comparison -->
+        <div class="card">
+            <h2 class="section-title">&#9878;&#65039; Team Comparison</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="comp-team-a">Team A</label>
+                    <select id="comp-team-a"></select>
+                </div>
+                <div class="filter-group">
+                    <label for="comp-team-b">Team B</label>
+                    <select id="comp-team-b"></select>
+                </div>
+                <button id="compare-btn" class="btn btn-secondary">Compare</button>
+            </div>
+            <canvas id="comparisonChart" height="140"></canvas>
+        </div>
+
+        <!-- League Table -->
+        <div class="card">
+            <h2 class="section-title">&#127942; League Table</h2>
+            <div class="table-wrap">
+                <table id="league-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Team</th>
+                            <th>P</th>
+                            <th>W</th>
+                            <th>D</th>
+                            <th>L</th>
+                            <th>GF</th>
+                            <th>GA</th>
+                            <th>GD</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="league-tbody">
+                        <tr><td colspan="10" class="empty">–</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        Football Match Insights Dashboard &mdash; Daniel Ejie &mdash; BSc Computer Science, Leeds Beckett University &mdash; Data: football-data.org
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
-
