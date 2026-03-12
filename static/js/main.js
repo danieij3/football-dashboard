@@ -1,6 +1,7 @@
 /**
  * main.js
  * Dashboard logic — orchestrates data fetching, table rendering, and charts.
+ * Dynamic data loading uses the native fetch API to request JSON from Flask endpoints.
  */
 
 // -------------------------------------------------------------------
@@ -18,6 +19,7 @@ function showError(msg) {
     setTimeout(() => (el.style.display = "none"), 6000);
 }
 
+/** Fetches JSON from a URL using the Fetch API. Throws on API error. */
 async function apiFetch(url) {
     const res = await fetch(url);
     const data = await res.json();
@@ -146,6 +148,7 @@ function renderStatCards(formData, teamStanding) {
 // Main load function — triggered by "Load Data" button
 // -------------------------------------------------------------------
 
+/** Dynamic load: fetches matches, standings, form via fetch API when Load Data is clicked. */
 async function loadDashboard() {
     const compId = parseInt(document.getElementById("comp-select").value);
     const teamId = document.getElementById("team-select").value;
