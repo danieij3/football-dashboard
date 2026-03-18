@@ -129,10 +129,13 @@ function drawPointsChart(canvasId, standings, topN = 5) {
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
 
+    if (!standings || standings.length === 0) return;
     const top = standings.slice(0, topN);
+    if (!top.length) return;
 
     // Approximate: distribute points evenly across games played
     const maxGames = Math.max(...top.map(t => t.playedGames));
+    if (!maxGames || maxGames < 1) return;
     const labels = Array.from({ length: maxGames }, (_, i) => `GW ${i + 1}`);
 
     const datasets = top.map((team, idx) => {
@@ -162,6 +165,18 @@ function drawPointsChart(canvasId, standings, topN = 5) {
                 x: { title: { display: true, text: "Gameweek" } },
                 y: { title: { display: true, text: "Points" }, beginAtZero: true },
             },
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+                legend: { position: "top" },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const v = context.parsed.y;
+                            return `${context.dataset.label}: ${v === null ? "–" : v}`;
+                        }
+                    }
+                }
+            }
         },
     }));
 }
@@ -177,6 +192,7 @@ function drawComparisonChart(canvasId, teamA, teamB) {
     destroyChart(canvasId);
     const ctx = document.getElementById(canvasId);
     if (!ctx) return;
+    if (!teamA || !teamB) return;
 
     const labels = ["Wins", "Draws", "Losses", "Goals Scored", "Goals Conceded"];
     const aData = [teamA.wins, teamA.draws, teamA.losses, teamA.goalsScored, teamA.goalsConceded];
@@ -196,6 +212,16 @@ function drawComparisonChart(canvasId, teamA, teamB) {
             plugins: { legend: { position: "top" } },
             scales: {
                 y: { beginAtZero: true, ticks: { stepSize: 1 } },
+            },
+            plugins: {
+                legend: { position: "top" },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.dataset.label}: ${context.parsed.y}`;
+                        }
+                    }
+                }
             },
         },
     }));
