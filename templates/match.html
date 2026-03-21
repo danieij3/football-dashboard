@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Details – Football Insights</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="nav-back">&#8592; Dashboard</a>
+        <span class="nav-logo">&#9917; Match Details</span>
+    </nav>
+
+    <div class="container">
+
+        <div id="error-banner" class="error-banner" style="display:none"></div>
+        <div id="loading" class="loading">Loading match details&hellip;</div>
+
+        <!-- Match Header -->
+        <div class="card match-header" id="match-header" style="display:none">
+            <div class="match-teams">
+                <div class="match-team" id="home-name">–</div>
+                <div class="match-score" id="match-score">– : –</div>
+                <div class="match-team" id="away-name">–</div>
+            </div>
+            <div class="match-meta">
+                <span id="match-date">–</span>
+                &bull;
+                <span id="match-competition">–</span>
+                &bull;
+                <span id="match-status">–</span>
+            </div>
+        </div>
+
+        <!-- Half-time score -->
+        <div class="card" id="ht-card" style="display:none">
+            <h2 class="section-title">Half-Time Score</h2>
+            <p class="big-stat" id="ht-score">–</p>
+        </div>
+
+        <!-- Score timeline: cumulative goals over match minutes -->
+        <div class="card" id="timeline-card" style="display:none">
+            <h2 class="section-title">&#128202; Match Score Timeline</h2>
+            <canvas id="timelineChart" height="120"></canvas>
+        </div>
+
+        <!-- Match events: goals, cards, substitutions in chronological order -->
+        <div class="card" id="events-card" style="display:none">
+            <h2 class="section-title">&#9889; Match Events</h2>
+            <ul class="events-list" id="events-list"></ul>
+        </div>
+
+        <!-- Head-to-head form -->
+        <div class="card" id="form-card" style="display:none">
+            <h2 class="section-title">&#128200; Head-to-Head Form (last 5 each)</h2>
+            <canvas id="formMatchChart" height="140"></canvas>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        Football Match Insights Dashboard &mdash; Daniel Ejie &mdash; Data: football-data.org
+    </footer>
+
+    <script>
+        /* Pass Flask template variable to JS */
+        const MATCH_ID = {{ match_id }};
+    </script>
+    <script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/match.js') }}"></script>
+</body>
+</html>
