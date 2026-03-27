@@ -1,1 +1,105 @@
-/* static/css/style.css: Add your custom styles for the dashboard here */
+/* ------------------------------------------------------------
+   Football Match Insights Dashboard — styling
+   Goal: clean, readable, responsive layout for tables + charts.
+   ------------------------------------------------------------ */
+
+/* Base */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #f3f6fb;
+  color: #101828;
+}
+
+/* Layout */
+.container {
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 0 16px;
+}
+
+/* Headings */
+h1 { margin: 0 0 12px; font-size: 2rem; }
+h2 { margin: 0 0 12px; font-size: 1.2rem; }
+
+/* Filters / controls */
+.selectors, .filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+  margin: 14px 0 18px;
+}
+label { font-weight: 600; font-size: 0.9rem; }
+select, button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d0d5dd;
+  background: #fff;
+  font-size: 0.95rem;
+}
+button {
+  cursor: pointer;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 700;
+}
+button:hover { background: #1d4ed8; }
+
+/* Cards */
+.card, .section, .container > div {
+  background: #fff;
+  border: 1px solid #eaecf0;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eaecf0;
+  text-align: left;
+  font-size: 0.95rem;
+}
+th {
+  background: #f9fafb;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #344054;
+}
+tr:hover td { background: #f8fafc; }
+
+/* Canvas */
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Alerts */
+.alert {
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #7f1d1d;
+  margin-bottom: 12px;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .container { margin: 16px auto; }
+  h1 { font-size: 1.5rem; }
+  th, td { font-size: 0.9rem; }
+  .selectors, .filters { align-items: stretch; }
+  select, button { width: 100%; }
+}
