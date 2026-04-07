@@ -13,6 +13,8 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+# Log level: INFO for failures; DEBUG for successful outbound calls (see _get)
+
 BASE_URL = "https://api.football-data.org/v4"
 API_KEY = os.getenv("FOOTBALL_API_KEY")
 
@@ -33,18 +35,30 @@ def _get(endpoint: str, params: dict = None) -> dict:
     Raises a RuntimeError with a human-readable message on failure.
     """
     if not API_KEY:
+        logger.error("FOOTBALL_API_KEY is not set in environment")
         raise RuntimeError("FOOTBALL_API_KEY is not set in .env")
     url = f"{BASE_URL}{endpoint}"
     headers = {"X-Auth-Token": API_KEY}
     try:
         resp = requests.get(url, headers=headers, params=params, timeout=10)
         resp.raise_for_status()
+        logger.debug("GET %s %s -> %s", url, params or {}, resp.status_code)
         return resp.json()
     except requests.exceptions.HTTPError as e:
-        logger.error("HTTP error %s for %s", resp.status_code, url)
-        raise RuntimeError(f"API error {resp.status_code}: {resp.text}") from e
+        code = resp.status_code
+        snippet = (resp.text or "")[:200]
+        logger.error("HTTP %s for %s: %s", code, url, snippet)
+        if code == 429:
+            raise RuntimeError(
+                "Too many requests to football-data.org (rate limit). "
+                "Wait a minute and try again."
+            ) from e
+        raise RuntimeError(f"API error {code}: {resp.text}") from e
+    except requests.exceptions.Timeout as e:
+        logger.error("HTTP timeout for %s: %s", url, e)
+        raise RuntimeError("Request timed out to football-data.org API") from e
     except requests.exceptions.RequestException as e:
-        logger.error("Request failed: %s", e)
+        logger.error("Request failed for %s: %s", url, e)
         raise RuntimeError(f"Network error: {str(e)}") from e
 
 
