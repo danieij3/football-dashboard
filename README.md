@@ -65,3 +65,27 @@ python app.py
 - `static/js/charts.js` - chart functions
 - `static/js/match.js` - match page logic
 - `static/css/style.css` - styling
+- `tests/` - pytest API tests
+
+## Running tests
+
+```bash
+source venv/bin/activate
+pip install -r requirements.txt
+pytest -q
+```
+
+## Test plan + results (manual + automated)
+
+| Feature | Test type | Expected | Actual | Pass/Fail |
+| --- | --- | --- | --- | --- |
+| Dashboard loads | Manual | Page shows filters and tables | Page loads after `python app.py` | Pass |
+| Chart.js charts render | Manual | Form and goals charts appear after Load Data | Charts draw when API returns data | Pass |
+| API competitions JSON | Automated (`pytest`) | `GET /api/competitions` returns 200 and a list | `tests/test_api.py` | Pass |
+| API matches validation | Automated (`pytest`) | `GET /api/matches` without `competition` returns 400 | `tests/test_api.py` | Pass |
+| API matches (mocked) | Automated (`pytest`) | Filtered match list JSON when service is stubbed | `tests/test_api.py` | Pass |
+
+## Performance notes
+
+- **Server-side:** Each `/api/*` response includes an `X-Response-Time-Ms` header (milliseconds) measured in Flask. Typical local values are small; most time is spent waiting on football-data.org when the key is valid.
+- **Browser:** Use Chrome DevTools → Network to see total page load and Chart.js asset load times; expect a few hundred ms to a few seconds depending on API latency and cache.
